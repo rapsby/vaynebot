@@ -12,8 +12,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content.startswith("!안녕"):
-        await message.channel.send("윤호준바보")
+    if message.content.startswith("안녕"):
+        await client.send_message(message.channel, "윤호준바보")
 
 access_token = os.environ["BOT_TOKEN"]        
 client.run(access_token)

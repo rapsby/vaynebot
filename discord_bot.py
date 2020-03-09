@@ -70,6 +70,7 @@ async def on_message(message):
             await client.send_message(message.channel, '봇이 이미 들어와있습니다.') 
             
     if message.content.startswith('!시발'):
+        
         await client.send_message(message.channel, "voice_client : ", voice_client, "server: ", server)
         
     if message.content.startswith("!재생"):

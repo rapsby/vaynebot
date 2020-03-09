@@ -13,7 +13,18 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.content.startswith("안녕"):
-        await client.send_message(message.channel, "윤호준바보")
+        await client.send_message(message.channel, "윤호준바아보")
+        embed = discord.Embed(
+            title='고양이는',
+            description='멍멍',
+            colour=discord.Colour.green()
+        )
+
+        urlBase = 'https://loremflickr.com/320/240?lock='
+        randomNum = random.randrange(1, 30977)
+        urlF = urlBase+str(randomNum)
+        embed.set_image(url = urlF)
+        await client.send_message(message.channel, embed=embed)
 
 access_token = os.environ["BOT_TOKEN"]        
 client.run(access_token)

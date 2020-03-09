@@ -63,23 +63,25 @@ async def on_message(message):
         channel = message.author.voice.voice_channel
         server = message.server
         voice_client = client.voice_client_in(server)
-        print(voice_client)
 
         if voice_client == None:
             await client.send_message(message.channel, '들어왔습니다')
             await client.join_voice_channel(channel)
+            print(voice_client)
+            
         else:
             await client.send_message(message.channel, '봇이 이미 들어와있습니다.') 
             
     if message.content.startswith("!나가"):
         server = message.server
         voice_client = client.voice_client_in(server)
-        if voice_client == None:
+        if client.is_voice_connected(server):
+            await client.send_message(message.channel, 'ㅃ2') # 나가드림
+            await voice_client.disconnect()
+        else:
             await client.send_message(message.channel,'봇이 음성채널에 접속하지 않았습니다.') # 원래나가있었음 바보녀석 니녀석의 죄는 "어리석음" 이라는 .것.이.다.
             pass
-        else:
-            await client.send_message(message.channel, '나갑니다') # 나가드림
-            await voice_client.disconnect()
+            
             
     if message.content.startswith("!재생"):
         server = message.server

@@ -25,7 +25,7 @@ searchYoutubeHref={}
 
 server = ''
 voice_client = ''
-
+discord.opus.load_opus()
 def check_queue(id):
     if queues[id]!=[]:
         player = queues[id].pop(0)

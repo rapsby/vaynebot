@@ -1,5 +1,8 @@
 import discord
 import os
+import random
+import youtube_dl
+import asyncio
 
 client = discord.Client()
 @client.event

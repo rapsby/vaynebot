@@ -25,7 +25,8 @@ searchYoutubeHref={}
 
 server = ''
 voice_client = ''
-discord.opus.load_opus('opus')
+if not discord.opus.is_loaded():
+    discord.opus.load_opus('opus')
 def check_queue(id):
     if queues[id]!=[]:
         player = queues[id].pop(0)
@@ -56,6 +57,7 @@ async def on_message(message):
         urlF = urlBase+str(randomNum)
         embed.set_image(url = urlF)
         await client.send_message(message.channel, embed=embed)
+        print('안녕')
 
     if message.content.startswith("!들어와"):
         channel = message.author.voice.voice_channel

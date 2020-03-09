@@ -76,10 +76,10 @@ async def on_message(message):
         server = message.server
         voice_client = client.voice_client_in(server)
         if client.is_voice_connected(server):
-            await client.send_message(message.channel, 'ㅃ2') # 나가드림
+            await client.send_message(message.channel, '성공 : ㅃ2') # 나가드림
             await voice_client.disconnect()
         else:
-            await client.send_message(message.channel,'봇이 음성채널에 접속하지 않았습니다.') # 원래나가있었음 바보녀석 니녀석의 죄는 "어리석음" 이라는 .것.이.다.
+            await client.send_message(message.channel,'실패 : 좆까') # 원래나가있었음 바보녀석 니녀석의 죄는 "어리석음" 이라는 .것.이.다.
             pass
             
             

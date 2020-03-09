@@ -4,6 +4,23 @@ import random
 import youtube_dl
 import asyncio
 
+
+countG = 0
+client = discord.Client()
+players = {}
+queues= {}
+musiclist=[]
+mCount=1
+searchYoutube={}
+searchYoutubeHref={}
+
+def check_queue(id):
+    if queues[id]!=[]:
+        player = queues[id].pop(0)
+        players[id] = player
+        del musiclist[0]
+        player.start()
+
 client = discord.Client()
 @client.event
 async def on_ready():

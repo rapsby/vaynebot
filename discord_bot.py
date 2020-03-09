@@ -33,7 +33,6 @@ def check_queue(id):
         del musiclist[0]
         player.start()
 
-client = discord.Client()
 @client.event
 async def on_ready():
     #print(client.user.id)
@@ -62,15 +61,16 @@ async def on_message(message):
         channel = message.author.voice.voice_channel
         server = message.server
         voice_client = client.voice_client_in(server)
+        print(voice_client)
 
-        if voice_client== None:
+        if voice_client == None:
             await client.send_message(message.channel, '들어왔습니다')
             await client.join_voice_channel(channel)
         else:
             await client.send_message(message.channel, '봇이 이미 들어와있습니다.') 
             
     if message.content.startswith('!시발'):
-        
+
         await client.send_message(message.channel, "voice_client : ", voice_client, "server: ", server)
         
     if message.content.startswith("!재생"):

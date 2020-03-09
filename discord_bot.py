@@ -1,8 +1,19 @@
 import discord
-import os
-import random
-import youtube_dl
 import asyncio
+import random
+from discord import Member
+from discord.ext import commands
+import youtube_dl
+from urllib.request import urlopen, Request
+import urllib
+import urllib.request
+import bs4
+import os
+import sys
+import json
+from selenium import webdriver
+import time
+import datetime
 
 
 countG = 0

@@ -13,7 +13,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.content.startswith("안녕"):
-        await client.send_message(message.channel, "윤호준바아보")
+        #await client.send_message(message.channel, "윤호준바아보")
         embed = discord.Embed(
             title='고양이는',
             description='멍멍',

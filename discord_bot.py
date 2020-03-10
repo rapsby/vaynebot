@@ -44,7 +44,7 @@ async def on_message(message):
 
     if '호준' in message.content:
         await client.send_message(message.channel, '호준이는 바보')
-
+        
     if message.content.startswith("안녕"):
         #await client.send_message(message.channel, "윤호준바아보")
         embed = discord.Embed(
@@ -89,7 +89,7 @@ async def on_message(message):
             return
 
         try:
-            voice_client = await channel.connect()
+            voice_client = await client.join_voice_channel(channel)
         except discord.errors.InvalidArgument: #유저가 음성채널에 접속해있지 않을 때
             await client.send_message(message.channel, embed=discord.Embed(title=":no_entry_sign: 음성채널에 접속하고 사용해주세요.",colour = 0x2EFEF7))
             return

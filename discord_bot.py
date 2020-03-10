@@ -64,7 +64,7 @@ async def on_message(message):
         server = message.server
         voice_client = client.voice_client_in(server)
 
-        if voice_client == None:
+        if client.voice_client_in(channel) == None:
             await client.send_message(message.channel, '들어왔습니다')
             await client.join_voice_channel(channel)
             print(voice_client)
@@ -75,7 +75,7 @@ async def on_message(message):
     if message.content.startswith("!나가"):
         server = message.server
         voice_client = client.voice_client_in(server)
-        if client.is_voice_connected(server):
+        if voice_client:
             await client.send_message(message.channel, '성공 : ㅃ2') # 나가드림
             await voice_client.disconnect()
         else:
@@ -89,10 +89,8 @@ async def on_message(message):
         msg1 = message.content.split(" ")
         url = msg1[1]
         player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
-        print(player.is_playing())
         players[server.id] = player
-        await client.send_message(message.channel, embed=discord.Embed(description="재생한다!!!!"))
-        print(player.is_playing())
+        #await client.send_message(message.channel, embed=discord.Embed(description="재생한다!!!!"))
         player.start()
 
 

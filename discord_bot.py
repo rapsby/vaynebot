@@ -22,7 +22,6 @@ musiclist=[]
 mCount=1
 searchYoutube={}
 searchYoutubeHref={}
-
 server = ''
 voice_client = ''
 if not discord.opus.is_loaded():
@@ -65,7 +64,7 @@ async def on_message(message):
         voice_client = client.voice_client_in(server)
 
         voice_client = server.voice_client
-        
+
         if voice_client == None:
             await client.send_message(message.channel, '들어왔습니다')
             await client.join_voice_channel(channel)
@@ -74,7 +73,7 @@ async def on_message(message):
             await client.send_message(message.channel, '봇이 이미 들어와있습니다.') 
 
     if '호준' in message.content:
-        await client.send_message(message.channel, '호준이는 바보')
+        await client.send_message(message.channel, '바보')
 
     if message.content.startswith("!나가"):
         server = message.server

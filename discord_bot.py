@@ -13,6 +13,7 @@ import json
 import time
 import datetime
 import re
+import opuslib
 
 client = discord.Client()
 que = {}
@@ -42,7 +43,7 @@ async def on_message(message):
     if message.author == client.user: #봇이 채팅을 쳤을 때 명령어로 인식되지 않음
         return
 
-        if '호준' in message.content:
+    if '호준' in message.content:
         embed = discord.Embed(
             title='호준이는 ',
             description='천재',

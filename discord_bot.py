@@ -50,7 +50,7 @@ async def on_message(message):
         )	
         await client.send_message(message.channel, embed=embed)
     if '상민' in message.content:
-	embed = discord.Embed(
+        embed = discord.Embed(
             title='상민이는 ',
             description='바보',
             colour=discord.Colour.blue()

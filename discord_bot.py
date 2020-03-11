@@ -43,10 +43,21 @@ async def on_message(message):
         return
 
     if '호준' in message.content:
-        await client.send_message(message.channel, '호준이는 바보')
+        embed = discord.Embed(
+            title='호준이는 ',
+            description='천재',
+            colour=discord.Colour.green()
+        )
+        await client.send_message(message.channel, embed=embed)
+    if '상민' in message.content:
+        embed = discord.Embed(
+            title='상민이는 ',
+            description='바보',
+            colour=discord.Colour.blue()
+        )
+        await client.send_message(message.channel, embed=embed)
         
     if message.content.startswith("안녕"):
-        #await client.send_message(message.channel, "윤호준바아보")
         embed = discord.Embed(
             title='고양이는',
             description='멍멍',

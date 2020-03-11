@@ -42,11 +42,11 @@ async def on_message(message):
     if message.author == client.user: #봇이 채팅을 쳤을 때 명령어로 인식되지 않음
         return
 
-    if '호준' in message.content:
+        if '호준' in message.content:
         embed = discord.Embed(
             title='호준이는 ',
             description='천재',
-            colour=discord.Colour.blurple()
+            colour=discord.Colour.dark_red()
         )
         await client.send_message(message.channel, embed=embed)
 

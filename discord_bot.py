@@ -114,7 +114,7 @@ async def on_message(message):
     if message.content.startswith("안녕"):
         embed = discord.Embed(
             title='고양이는',
-            description='멍멍',
+            description='애옹',
             colour=discord.Colour.green()
         )
 

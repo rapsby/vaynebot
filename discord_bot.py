@@ -196,7 +196,7 @@ async def on_message(message):
         if message.author.voice and message.author.voice.channel:
             channel = message.author.voice.channel            
             if client.voice_clients and channel == client.voice_clients[0].channel:
-                client.voice_clients[0].disconnect()
+                await client.voice_clients[0].disconnect()
 
     if message.content.startswith("-?") or message.content.startswith("-h"):
         description = "-p(lay) song title \n-l(ist)\n-s(kip)\n-q(uit)\n-?\n-h(elp)"

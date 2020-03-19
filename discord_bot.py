@@ -22,27 +22,14 @@ que = {}
 pid = 0
 
 
-started = False
-
 class VoiceState(object):
     def __init__(self, client):
         self.current = None
-        self.voice = None
         self.client = client
         self.channel = None
         self.plist = list()
         self.songs = asyncio.Queue()
         self.play_next_song = asyncio.Event()
-
-    def is_playing(self):
-        if self.voice is None or self.current is None:
-            return False
-        player = self.current.player
-        return not player.is_done()
-
-    @property
-    def player(self):
-        return self.current.player
 
     def toggle_next(self, *args):
         print('toggle_next')
@@ -118,6 +105,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    global vs
     server = message.guild
     if message.author == client.user:
         return
@@ -142,6 +130,7 @@ async def on_message(message):
                 voice_client = client.voice_clients[0]
             else:
                 voice_client = await channel.connect()
+                vs.channel = voice_client
             player = await YTDLSource.from_url('https://www.youtube.com/watch?v='+id)
 
             embed = discord.Embed(
@@ -149,7 +138,7 @@ async def on_message(message):
                 description=time.strftime('%H:%M:%S', time.gmtime(player.data['duration'])),
                 colour=discord.Colour.blue()
             )
-            print(embed)
+            print(player)
             '''
             if server.id in que:
                 que[server.id].append(player)
@@ -159,11 +148,7 @@ async def on_message(message):
             queue(server.id, voice_client)
             '''
             
-            global started
-            if not started:
-                started = True
-                vs.channel = voice_client
-                task()
+            
             await vs.songs.put(player)
             vs.plist.append(player.title)
             
@@ -176,8 +161,8 @@ async def on_message(message):
             playstr = "```css\n[재생목록]\n\n"
             playstr += str(1)+" : " + vs.current.title + "{--playing} \n"            
             for i in range(0, len(vs.plist)):
-                playstr += str(i+2)+" : "+(vs.plist[i]).title+"\n"
-            await message.channel.send(playstr+"```")
+                playstr += str(i+2)+" : "+vs.plist[i].title()+"\n"
+            await message.channel.send(embed=discord.Embed(title=playstr,colour = 0x2EFEF7))
         else:
             await message.channel.send(embed=discord.Embed(title=":no_entry_sign: 재생목록이 없습니다.",colour = 0x2EFEF7))
             return
@@ -197,6 +182,7 @@ async def on_message(message):
             channel = message.author.voice.channel            
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 await client.voice_clients[0].disconnect()
+                vs = VoiceState(client)
 
     if message.content.startswith("-?") or message.content.startswith("-h"):
         description = "-p(lay) song title \n-l(ist)\n-s(kip)\n-q(uit)\n-?\n-h(elp)"
@@ -236,5 +222,6 @@ async def on_message(message):
         embed.set_image(url = urlF)
         await message.channel.send(embed=embed)
 
+task()
 access_token = os.environ["BOT_TOKEN"]        
 client.run(access_token)

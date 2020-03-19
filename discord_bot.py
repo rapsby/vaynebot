@@ -156,7 +156,7 @@ async def on_message(message):
             
     if message.content.startswith("-l") or message.content.startswith("-ㅣ"):
 
-        if vs.plist or vs.current:
+        if vs.plist or vs.current and vs.channel and vs.channel.is_playing():
             playstr = "```css\n[재생목록]\n\n"
             playstr += str(1)+" : " + vs.current.title + "\n[-----playing] \n"            
             for i in range(0, len(vs.plist)):

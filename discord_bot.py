@@ -174,7 +174,7 @@ async def on_message(message):
 
         if vs.plist or vs.current:
             playstr = "```css\n[재생목록]\n\n"
-            playstr += str(1) + vs.current.title + "[--playing] \n"            
+            playstr += str(1)+" : " + vs.current.title + "{--playing} \n"            
             for i in range(0, len(vs.plist)):
                 playstr += str(i+2)+" : "+(vs.plist[i]).title+"\n"
             await message.channel.send(playstr+"```")

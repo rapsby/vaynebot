@@ -39,7 +39,7 @@ class VoiceState(object):
         while True:
             self.play_next_song.clear()
             self.current = await self.songs.get()
-            self.plist.pop()
+            self.plist.pop(0)
             self.channel.play(self.current, after=self.toggle_next)
             await self.play_next_song.wait()
 

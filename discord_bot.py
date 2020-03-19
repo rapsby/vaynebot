@@ -106,13 +106,12 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global vs
-    server = message.guild
     if message.author == client.user:
         return
-    if message.content.startswith("-pl"):
+    if message.content.startswith("-pl") or message.content.startswith("-ㅔㅣ"):
         await message.channel.send(embed=discord.Embed(title="It is not completed yet",colour = 0x2EFEF7))
         
-    elif message.content.startswith("-p"):
+    elif message.content.startswith("-p") or message.content.startswith("-P") or message.content.startswith("-ㅔ"):
         if message.author.voice and message.author.voice.channel:
             channel = message.author.voice.channel
             msg = message.content.split(" ")
@@ -155,7 +154,7 @@ async def on_message(message):
             await message.channel.send(embed = embed)
             
             
-    if message.content.startswith("-l"):
+    if message.content.startswith("-l") or message.content.startswith("-ㅣ"):
 
         if vs.plist or vs.current:
             playstr = "```css\n[재생목록]\n\n"
@@ -170,7 +169,7 @@ async def on_message(message):
         
 
        
-    if message.content.startswith("-s"):
+    if message.content.startswith("-s") or message.content.startswith("-ㄴ"):
         if message.author.voice and message.author.voice.channel:
             channel = message.author.voice.channel            
             if client.voice_clients and channel == client.voice_clients[0].channel:
@@ -178,14 +177,14 @@ async def on_message(message):
                     client.voice_clients[0].stop()
                     await message.channel.send(embed=discord.Embed(title="컽! by {}".format(message.author), colour = 0x2EFEF7))
 
-    if message.content.startswith("-q"):
+    if message.content.startswith("-q") or message.content.startswith("-ㅂ"):
         if message.author.voice and message.author.voice.channel:
             channel = message.author.voice.channel            
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 await client.voice_clients[0].disconnect()
                 vs = VoiceState(client)
 
-    if message.content.startswith("-?") or message.content.startswith("-h"):
+    if message.content.startswith("-?") or message.content.startswith("-h") or message.content.startswith("-ㅗ"):
         description = "-p(lay) song title \n-l(ist)\n-s(kip)\n-q(uit)\n-?\n-h(elp)"
         embed = discord.Embed(
             title="명령어",

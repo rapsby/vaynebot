@@ -198,6 +198,15 @@ async def on_message(message):
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 client.voice_clients[0].disconnect()
 
+    if message.content.startswith("-?") or message.content.startswith("-h"):
+        description = "-p(lay) song title \n-l(ist)\n-s(kip)\n-q(uit)\n-?\n-h(elp)"
+        embed = discord.Embed(
+            title="명령어",
+            description=description,
+            colour=discord.Colour.blue()
+            )
+        await message.channel.send(embed=embed)
+        
     if '호준' in message.content:
         embed = discord.Embed(
             title='호준이는 ',

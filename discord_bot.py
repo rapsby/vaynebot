@@ -132,7 +132,7 @@ async def on_message(message):
             q = msg[1:]
             q = "+".join(q)
             key = os.environ["key"] 
-            url = 'https://www.googleapis.com/youtube/v3/search?key={}&part=snippet&type=video&q='.format(key) + parse.quote(msg)
+            url = 'https://www.googleapis.com/youtube/v3/search?key={}&part=snippet&type=video&q='.format(key) + parse.quote(q)
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             with urllib.request.urlopen(req) as response:
                 source = response.read()

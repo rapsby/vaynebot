@@ -3,6 +3,7 @@ import asyncio
 import random
 from discord import Member
 from discord.ext import commands
+from discord.ext.commands import Bot
 import youtube_dl
 from urllib.request import urlopen, Request
 import urllib
@@ -17,20 +18,50 @@ import ffmpeg
 from urllib import parse
 
 client = discord.Client()
-
 que = {}
-playerlist = {}
-playlist = list()
+pid = 0
 
 
-def queue(id): #음악 재생용 큐
-	if que[id] != []:
-		player = que[id].pop(0)
-		playerlist[id] = player
-		del playlist[0]
-		player.start()
+started = False
 
+class VoiceState(object):
+    def __init__(self, client):
+        self.current = None
+        self.voice = None
+        self.client = client
+        self.channel = None
+        self.plist = list()
+        self.songs = asyncio.Queue()
+        self.play_next_song = asyncio.Event()
 
+    def is_playing(self):
+        if self.voice is None or self.current is None:
+            return False
+        player = self.current.player
+        return not player.is_done()
+
+    @property
+    def player(self):
+        return self.current.player
+
+    def toggle_next(self, *args):
+        print('toggle_next')
+        self.client.loop.call_soon_threadsafe(self.play_next_song.set)
+
+    async def audio_player_task(self):
+        while True:
+            self.play_next_song.clear()
+            self.current = await self.songs.get()
+            self.plist.pop()
+            self.channel.play(self.current, after=self.toggle_next)
+            await self.play_next_song.wait()
+
+vs = VoiceState(client)
+
+def task():
+    print('task')
+    client.loop.create_task(vs.audio_player_task())
+    
 youtube_dl.utils.bug_reports_message = lambda: ''
 
 
@@ -50,7 +81,7 @@ ytdl_format_options = {
 
 ffmpeg_options = {
     'options': '-vn',
-    #'executable':"C:/ffmpeg/bin/ffmpeg.exe"
+    'executable':"C:/ffmpeg/bin/ffmpeg.exe"
 }
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
@@ -76,15 +107,11 @@ class YTDLSource(discord.PCMVolumeTransformer):
         filename = data['url'] if stream else ytdl.prepare_filename(data)
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
-
-
-
-
-
 @client.event
 async def on_ready():
     #print(client.user.id)
     print("ready")
+    print(discord.__version__)
     activity = discord.Game(name="호준이가 노래")
     await client.change_presence(status=discord.Status.online , activity=activity)
 
@@ -92,8 +119,83 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author == client.user: #봇이 채팅을 쳤을 때 명령어로 인식되지 않음
+    server = message.guild
+    if message.author == client.user:
         return
+    if message.content.startswith("-pl"):
+        await message.channel.send(embed=discord.Embed(title="It is not completed yet",colour = 0x2EFEF7))
+        
+    elif message.content.startswith("-p"):
+        if message.author.voice and message.author.voice.channel:
+            channel = message.author.voice.channel
+            msg = message.content.split(" ")
+            q = msg[1:]
+            q = "+".join(q)
+            key = os.environ["key"] 
+            url = 'https://www.googleapis.com/youtube/v3/search?key={}&part=snippet&type=video&q='.format(key) + parse.quote(msg)
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req) as response:
+                source = response.read()
+                data = json.loads(source)
+                id = data['items'][0]['id']['videoId']
+            
+            if client.voice_clients and channel == client.voice_clients[0].channel:
+                voice_client = client.voice_clients[0]
+            else:
+                voice_client = await channel.connect()
+            player = await YTDLSource.from_url('https://www.youtube.com/watch?v='+id)
+
+            embed = discord.Embed(
+                title=player.data['title'],
+                description=time.strftime('%H:%M:%S', time.gmtime(player.data['duration'])),
+                colour=discord.Colour.blue()
+            )
+            print(embed)
+            '''
+            if server.id in que:
+                que[server.id].append(player)
+            else: 
+                que[server.id] = [player]
+
+            queue(server.id, voice_client)
+            '''
+            
+            global started
+            if not started:
+                vs.plist.append(player.title)
+                started = True
+                vs.channel = voice_client
+                task()
+            await vs.songs.put(player)
+            vs.plist.append(player.title)
+            
+            await message.channel.send(embed = embed)
+            
+            
+    if message.content.startswith("-l"):
+
+        if vs.plist:
+            playstr = "```css\n[재생목록]\n\n"
+            for i in range(0, len(vs.plist)):
+                playstr += str(i+1)+" : "+vs.plist[i].title+"\n"
+            await message.channel.send(playstr+"```")
+        else:
+            await message.channel.send(embed=discord.Embed(title=":no_entry_sign: 재생목록이 없습니다.",colour = 0x2EFEF7))
+            return
+        
+
+       
+    if message.content.startswith("-s"):
+        id = server.id
+        if message.author.voice and message.author.voice.channel:
+            channel = message.author.voice.channel            
+            if client.voice_clients and channel == client.voice_clients[0].channel:
+                if client.voice_clients[0].is_playing():
+                    client.voice_clients[0].stop()
+                    #queue(id, client.voice_clients[0])
+                    await message.channel.send(embed=discord.Embed(title="컽! by {}".format(message.author), colour = 0x2EFEF7))
+
+
 
     if '호준' in message.content:
         embed = discord.Embed(
@@ -114,7 +216,7 @@ async def on_message(message):
     if message.content.startswith("안녕"):
         embed = discord.Embed(
             title='고양이는',
-            description='애옹',
+            description='멍멍',
             colour=discord.Colour.green()
         )
 
@@ -123,91 +225,6 @@ async def on_message(message):
         urlF = urlBase+str(randomNum)
         embed.set_image(url = urlF)
         await message.channel.send(embed=embed)
-
-    if message.content.startswith("-p"): #음성채널에 봇을 추가 및 음악 재생
-        msg = message.content.split(" ")
-        msg = msg[1:]
-        msg = "+".join(msg)
-        key = os.environ["key"] 
-        url = 'https://www.googleapis.com/youtube/v3/search?key={}&part=snippet&q='.format(key) + parse.quote(msg)
-        with urllib.request.urlopen(url) as response:
-            source = response.read()
-            data = json.loads(source)
-            id = data['items'][0]['id']['videoId']
-
-
-        if message.author.voice == None:
-            await message.channel.send('You have to join a voice channel.')
-        else:
-            channel = message.author.voice.channel
-            voice_client = await channel.connect()
-            print(voice_client.is_connected())
-            print(voice_client.channel)
-            print(channel)
-            #if voice_client.is_connected() and not playerlist[str(server.id)].is_playing(): #봇이 음성채널에 접속해있으나 음악을 재생하지 않을 때
-            #    await voice_client.disconnect()
-            #elif voice_client.is_connected() and playerlist[str(server.id)].is_playing(): #봇이 음성채널에 접속해있고 음악을 재생할 때
-            if voice_client.is_connected():
-                
-                player = await YTDLSource.from_url('https://www.youtube.com/watch?v='+id)
-                voice_client.play(player)
-                '''
-                if server.id in que: #큐에 값이 들어있을 때
-                    que[server.id].append(player)
-                else: #큐에 값이 없을 때
-                    que[server.id] = [player]
-                await message.channel.send(embed=discord.Embed(title=":white_check_mark: 추가 완료!",colour = 0x2EFEF7))
-                '''
-                
-                #playlist.append(player.title) #재생목록에 제목 추가
-                return
-
-            try:
-                voice_client = await channel.connect()
-            except discord.errors.InvalidArgument: #유저가 음성채널에 접속해있지 않을 때
-                await message.channel.send(embed=discord.Embed(title=":no_entry_sign: 음성채널에 접속하고 사용해주세요.",colour = 0x2EFEF7))
-                return
-
-            try:
-                player = await voice_client.create_ytdl_player(url,after=lambda:queue(server.id),before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5")
-                playerlist[server.id] = player
-                playlist.append(player.title)
-            except youtube_dl.utils.DownloadError: #유저가 제대로 된 유튜브 경로를 입력하지 않았을 때
-                await message.channel.send(embed=discord.Embed(title=":no_entry_sign: 존재하지 않는 경로입니다.",colour = 0x2EFEF7))
-                await voice_client.disconnect()
-                return
-            player.start()
-'''
-    if message.content == "!종료": #음성채널에서 봇을 나가게 하기
-        server = message.server
-        voice_client = await channel.connect()
-
-        if voice_client == None: #봇이 음성채널에 접속해있지 않았을 때
-            await message.channel.send(embed=discord.Embed(title=":no_entry_sign: 봇이 음성채널에 없어요.",colour = 0x2EFEF7))
-            return
-        
-        await message.channel.send(embed=discord.Embed(title=":mute: 채널에서 나갑니다.",colour = 0x2EFEF7)) #봇이 음성채널에 접속해있을 때
-        await voice_client.disconnect()
-
-    if message.content == "!스킵":
-        id = message.server.id
-        if not playerlist[id].is_playing(): #재생 중인 음악이 없을 때
-            await message.channel.send(embed=discord.Embed(title=":no_entry_sign: 스킵할 음악이 없어요.",colour = 0x2EFEF7))
-            return
-        await message.channel.send(embed=discord.Embed(title=":mute: 스킵했어요.",colour = 0x2EFEF7))
-        playerlist[id].stop()
-
-    if message.content == "!목록":
-
-        if playlist == []:
-            await message.channel.send(embed=discord.Embed(title=":no_entry_sign: 재생목록이 없습니다.",colour = 0x2EFEF7))
-            return
-
-        playstr = "```css\n[재생목록]\n\n"
-        for i in range(0, len(playlist)):
-            playstr += str(i+1)+" : "+playlist[i]+"\n"
-        await message.channel.send(playstr+"```")
-'''
 
 access_token = os.environ["BOT_TOKEN"]        
 client.run(access_token)

@@ -192,7 +192,7 @@ async def on_message(message):
                     client.voice_clients[0].stop()
                     await message.channel.send(embed=discord.Embed(title="컽! by {}".format(message.author), colour = 0x2EFEF7))
 
-    if message.content.startswith("-l"):
+    if message.content.startswith("-q"):
         if message.author.voice and message.author.voice.channel:
             channel = message.author.voice.channel            
             if client.voice_clients and channel == client.voice_clients[0].channel:

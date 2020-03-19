@@ -174,7 +174,7 @@ async def on_message(message):
 
         if vs.plist or vs.current:
             playstr = "```css\n[재생목록]\n\n"
-            playstr += str(1) + vs.current.player.title + "[--playing] \n"            
+            playstr += str(1) + vs.current.title + "[--playing] \n"            
             for i in range(0, len(vs.plist)):
                 playstr += str(i+2)+" : "+vs.plist[i].title+"\n"
             await message.channel.send(playstr+"```")
@@ -185,16 +185,18 @@ async def on_message(message):
 
        
     if message.content.startswith("-s"):
-        id = server.id
         if message.author.voice and message.author.voice.channel:
             channel = message.author.voice.channel            
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 if client.voice_clients[0].is_playing():
                     client.voice_clients[0].stop()
-                    #queue(id, client.voice_clients[0])
                     await message.channel.send(embed=discord.Embed(title="컽! by {}".format(message.author), colour = 0x2EFEF7))
 
-
+    if message.content.startswith("-l"):
+        if message.author.voice and message.author.voice.channel:
+            channel = message.author.voice.channel            
+            if client.voice_clients and channel == client.voice_clients[0].channel:
+                client.voice_clients[0].disconnect()
 
     if '호준' in message.content:
         embed = discord.Embed(

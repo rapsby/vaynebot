@@ -172,7 +172,7 @@ async def on_message(message):
             
     if message.content.startswith("-l"):
 
-        if vs.plist:
+        if vs.plist or vs.current:
             playstr = "```css\n[재생목록]\n\n"
             playstr += str(1) + vs.current.player.title + "[--playing] \n"            
             for i in range(0, len(vs.plist)):

@@ -108,10 +108,55 @@ async def on_message(message):
     global vs
     if message.author == client.user:
         return
-    if message.content.startswith("-pl") or message.content.startswith("-ㅔㅣ"):
-        await message.channel.send(embed=discord.Embed(title="It is not completed yet",colour = 0x2EFEF7))
-        
-    elif message.content.startswith("-p") or message.content.startswith("-P") or message.content.startswith("-ㅔ"):
+    if message.content.startswith("-pl") or message.content.startswith("-ㅔㅣ") or message.content.startswith("ㅔㅣ"):
+        if message.author.voice and message.author.voice.channel:
+            channel = message.author.voice.channel
+            msg = message.content.split(" ")
+            q = msg[1:]
+            q = "+".join(q)
+            key = os.environ["key"] 
+            url = 'https://www.googleapis.com/youtube/v3/search?key={}&part=snippet&type=video&q='.format(key) + parse.quote(q)
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req) as response:
+                source = response.read()
+                data = json.loads(source)
+                id_list = list()
+                for i in range(5):
+                    id = data['items'][i]['id']['videoId']
+                    id_list.append(id)
+                    
+                
+            
+            if client.voice_clients and channel == client.voice_clients[0].channel:
+                voice_client = client.voice_clients[0]
+            else:
+                voice_client = await channel.connect()
+                vs.channel = voice_client
+            player = await YTDLSource.from_url('https://www.youtube.com/watch?v='+id)
+
+            embed = discord.Embed(
+                title=player.data['title'],
+                description=time.strftime('%H:%M:%S', time.gmtime(player.data['duration'])),
+                colour=discord.Colour.blue()
+            )
+            
+            '''
+            server = message.guild
+            if server.id in que:
+                que[server.id].append(player)
+            else: 
+                que[server.id] = [player]
+
+            queue(server.id, voice_client)
+            '''
+            
+            
+            await vs.songs.put(player)
+            vs.plist.append(player.title)
+            
+            await message.channel.send(embed = embed)
+
+    elif message.content.startswith("-p") or message.content.startswith("-P") or message.content.startswith("-ㅔ") or message.content.startswith("ㅔㅔ"):
         if message.author.voice and message.author.voice.channel:
             channel = message.author.voice.channel
             msg = message.content.split(" ")
@@ -137,8 +182,9 @@ async def on_message(message):
                 description=time.strftime('%H:%M:%S', time.gmtime(player.data['duration'])),
                 colour=discord.Colour.blue()
             )
-            print(player)
+            
             '''
+            server = message.guild
             if server.id in que:
                 que[server.id].append(player)
             else: 

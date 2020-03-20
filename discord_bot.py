@@ -154,7 +154,7 @@ async def on_message(message):
                 voice_client = client.voice_clients[0]
             else:
                 voice_client = await channel.connect()
-                vs.channel = voice_client
+            vs.channel = voice_client
             player = await YTDLSource.from_url('https://www.youtube.com/watch?v='+id)
 
             embed = discord.Embed(
@@ -197,7 +197,8 @@ async def on_message(message):
                 voice_client = client.voice_clients[0]
             else:
                 voice_client = await channel.connect()
-                vs.channel = voice_client
+                
+            vs.channel = voice_client
             player = await YTDLSource.from_url('https://www.youtube.com/watch?v='+id)
 
             embed = discord.Embed(

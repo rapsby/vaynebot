@@ -251,6 +251,7 @@ async def on_message(message):
             channel = message.author.voice.channel            
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 await client.voice_clients[0].disconnect()
+                await message.channel.send(embed=discord.Embed(title="ㅂㅂ", colour = 0x2EFEF7))
                 vs = VoiceState(client)
 
     if message.content.startswith("-?") or message.content.startswith("-h") or message.content.startswith("-ㅗ"):

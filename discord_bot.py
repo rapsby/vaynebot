@@ -252,8 +252,9 @@ async def on_message(message):
             channel = message.author.voice.channel            
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 await client.voice_clients[0].disconnect()
+                vs.channel = None
+                vs.current = None
                 await message.channel.send(embed=discord.Embed(title="ㅂㅂ", colour = 0x2EFEF7))
-                vs = VoiceState(client)
 
     if message.content.startswith("-?") or message.content.startswith("-h") or message.content.startswith("-ㅗ"):
         description = "-p(lay) song title \n-l(ist)\n-s(kip)\n-q(uit)\n-?\n-h(elp)"

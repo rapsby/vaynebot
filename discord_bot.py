@@ -148,7 +148,7 @@ async def on_message(message):
             except asyncio.TimeoutError:
                 return
 
-            id = selected
+            id = id_list[selected]
 
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 voice_client = client.voice_clients[0]

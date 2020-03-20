@@ -141,13 +141,13 @@ async def on_message(message):
                 answer = await client.wait_for('message', timeout=60)
                 selected = None
                 if answer:
-                    if 1<=answer.content[0]<=5:
-                        selected = answer.content[0]-1
+                    if answer.content[0].isdigit():
+                        selected = int(answer.content[0])-1
                     else:
                         return
             except asyncio.TimeoutError:
                 return
-                
+
             id = selected
 
             if client.voice_clients and channel == client.voice_clients[0].channel:

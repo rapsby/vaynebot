@@ -117,16 +117,36 @@ async def on_message(message):
             key = os.environ["key"] 
             url = 'https://www.googleapis.com/youtube/v3/search?key={}&part=snippet&type=video&q='.format(key) + parse.quote(q)
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            
+            
+            
             with urllib.request.urlopen(req) as response:
                 source = response.read()
                 data = json.loads(source)
                 id_list = list()
+                title_list = list()
                 for i in range(5):
-                    id = data['items'][i]['id']['videoId']
-                    id_list.append(id)
-                    
-                
+                    sid = data['items'][i]['id']['videoId']
+                    title = data['items'][i]['snippet']['title']
+                    id_list.append(sid)
+                    title_list.append(title)
             
+            titlestr = "```css\n[음악선택]\n\n"
+            titlestr += "TYPE TO SELECT : 1 ~ 5\nTYPE TO Exit : anything\n"            
+            for i in range(0, len(title_list)):
+                titlestr += str(i+1)+" : "+title_list[i]+"\n"
+            await message.channel.send(titlestr+"```")   
+
+            answer = await channel.wait_for_message(author=message.author)
+            selected = None
+            if answer:
+                if 1<=answer.content[0]<=5:
+                    selected = answer.content[0]
+                else:
+                    return
+            
+            id = selected
+
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 voice_client = client.voice_clients[0]
             else:

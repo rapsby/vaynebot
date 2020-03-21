@@ -149,7 +149,6 @@ async def on_message(message):
                 return
 
             id = id_list[selected]
-
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 voice_client = client.voice_clients[0]
             else:
@@ -172,8 +171,6 @@ async def on_message(message):
 
             queue(server.id, voice_client)
             '''
-            
-            
             await vs.songs.put(player)
             vs.plist.append(player.title)
             

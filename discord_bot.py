@@ -259,8 +259,9 @@ async def on_message(message):
         if len(msg) > 1:
             if msg[1].isdigit():
                 amount = msg[1]
-        clear_message(amount)
+                clear_message(amount)
         
+
     if message.content.startswith("-?") or message.content.startswith("-h") or message.content.startswith("-ㅗ"):
         description = "-p(lay) song title \n-l(ist)\n-s(kip)\n-q(uit)\n-?\n-h(elp)"
         embed = discord.Embed(

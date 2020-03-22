@@ -259,7 +259,7 @@ async def on_message(message):
         if len(msg) > 1:
             if msg[1].isdigit():
                 amount = msg[1]
-                clear_message(amount)
+                await clear_message(amount)
         
 
     if message.content.startswith("-?") or message.content.startswith("-h") or message.content.startswith("-ㅗ"):

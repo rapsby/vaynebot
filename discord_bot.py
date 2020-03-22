@@ -253,13 +253,15 @@ async def on_message(message):
                 vs.current = None
                 await message.channel.send(embed=discord.Embed(title="ㅂㅂ", colour = 0x2EFEF7))
     if message.content.startswith("-clear"):
-        async def clear_message(amount = 1):
+        async def clear_message(amount):
 	        await message.channel.purge(limit = amount)
         msg = message.content.split(" ")
         if len(msg) > 1:
             if msg[1].isdigit():
                 amount = msg[1]
                 await clear_message(amount)
+        elif len(msg) == 1:
+            await clear_message(1)
         
 
     if message.content.startswith("-?") or message.content.startswith("-h") or message.content.startswith("-ㅗ"):

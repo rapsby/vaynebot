@@ -258,7 +258,7 @@ async def on_message(message):
         msg = message.content.split(" ")
         if len(msg) > 1:
             if msg[1].isdigit():
-                amount = msg[1]
+                amount = int(msg[1])
                 await clear_message(amount)
         elif len(msg) == 1:
             await clear_message(1)

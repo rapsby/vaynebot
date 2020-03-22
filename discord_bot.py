@@ -252,7 +252,15 @@ async def on_message(message):
                 vs.channel = None
                 vs.current = None
                 await message.channel.send(embed=discord.Embed(title="ㅂㅂ", colour = 0x2EFEF7))
-
+    if message.content.startswith("-clear"):
+        async def clear_message(amount = 1):
+	        await message.channel.purge(limit = amount)
+        msg = message.content.split(" ")
+        if len(msg) > 1:
+            if msg[1].isdigit():
+                amount = msg[1]
+        clear_message(amount)
+        
     if message.content.startswith("-?") or message.content.startswith("-h") or message.content.startswith("-ㅗ"):
         description = "-p(lay) song title \n-l(ist)\n-s(kip)\n-q(uit)\n-?\n-h(elp)"
         embed = discord.Embed(

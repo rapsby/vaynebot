@@ -175,7 +175,7 @@ async def on_message(message):
             '''
             await vs.songs.put(player)
             vs.plist.append(player.title)
-            await clear_message(2, message)
+            await clear_message(3, message)
             await message.channel.send(embed = embed)
 
     elif message.content.startswith("-p") or message.content.startswith("-P") or message.content.startswith("-ㅔ") or message.content.startswith("ㅔㅔ"):

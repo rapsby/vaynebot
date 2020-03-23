@@ -21,7 +21,7 @@ client = discord.Client()
 que = {}
 pid = 0
 
-async def clear_message(amount):
+async def clear_message(amount, message):
     await message.channel.purge(limit = amount)
 
 class VoiceState(object):
@@ -175,7 +175,7 @@ async def on_message(message):
             '''
             await vs.songs.put(player)
             vs.plist.append(player.title)
-            await clear_message(2)
+            await clear_message(2, message)
             await message.channel.send(embed = embed)
 
     elif message.content.startswith("-p") or message.content.startswith("-P") or message.content.startswith("-ㅔ") or message.content.startswith("ㅔㅔ"):
@@ -219,7 +219,7 @@ async def on_message(message):
             
             await vs.songs.put(player)
             vs.plist.append(player.title)
-            await clear_message(1)
+            await clear_message(1, message)
             await message.channel.send(embed = embed)
             
             
@@ -259,9 +259,9 @@ async def on_message(message):
         if len(msg) > 1:
             if msg[1].isdigit():
                 amount = int(msg[1])
-                await clear_message(amount)
+                await clear_message(amount, message)
         elif len(msg) == 1:
-            await clear_message(1)
+            await clear_message(1, message)
         
 
     if message.content.startswith("-?") or message.content.startswith("-h") or message.content.startswith("-ㅗ"):

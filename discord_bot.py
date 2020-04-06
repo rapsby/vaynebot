@@ -236,7 +236,6 @@ async def on_message(message):
             await message.channel.send(embed=discord.Embed(title=":no_entry_sign: 재생목록이 없습니다.",colour = 0x2EFEF7))
             return
         
-
        
     if message.content.startswith("-s") or message.content.startswith("-ㄴ"):
         if message.author.voice and message.author.voice.channel:
@@ -245,7 +244,7 @@ async def on_message(message):
                 if client.voice_clients[0].is_playing():
                     client.voice_clients[0].stop()
                     await message.channel.send(embed=discord.Embed(title="컽! by {}".format(message.author), colour = 0x2EFEF7))
-
+    '''
     if message.content.startswith("-q") or message.content.startswith("-ㅂ"):
         if message.author.voice and message.author.voice.channel:
             channel = message.author.voice.channel            
@@ -254,6 +253,7 @@ async def on_message(message):
                 vs.channel = None
                 vs.current = None
                 await message.channel.send(embed=discord.Embed(title="ㅂㅂ", colour = 0x2EFEF7))
+    '''
     if message.content.startswith("-clear"):
         msg = message.content.split(" ")
         if len(msg) > 1:
@@ -265,7 +265,7 @@ async def on_message(message):
         
 
     if message.content.startswith("-?") or message.content.startswith("-h") or message.content.startswith("-ㅗ"):
-        description = "-p(lay) song title \n-l(ist)\n-s(kip)\n-q(uit)\n-?\n-h(elp)"
+        description = "-p(lay) song title \n-l(ist)\n-s(kip)\n-?\n-h(elp)"
         embed = discord.Embed(
             title="명령어",
             description=description,

@@ -185,10 +185,12 @@ async def on_message(message):
             key = os.environ["key"] 
             url = 'https://www.googleapis.com/youtube/v3/search?key={}&part=snippet&type=video&q='.format(key) + parse.quote(q)
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+
             with urllib.request.urlopen(req) as response:
                 source = response.read()
                 data = json.loads(source)
                 id = data['items'][0]['id']['videoId']
+                await message.channel.send(data)
             
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 voice_client = client.voice_clients[0]
@@ -197,7 +199,7 @@ async def on_message(message):
                 
             vs.channel = voice_client
             player = await YTDLSource.from_url('https://www.youtube.com/watch?v='+id)
-
+            await message.channel.send(player)
             embed = discord.Embed(
                 title=player.data['title'],
                 description=time.strftime('%H:%M:%S', time.gmtime(player.data['duration'])),

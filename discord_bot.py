@@ -34,7 +34,6 @@ class VoiceState(object):
         self.play_next_song = asyncio.Event()
 
     def toggle_next(self, *args):
-        print('toggle_next')
         self.client.loop.call_soon_threadsafe(self.play_next_song.set)
 
     async def audio_player_task(self):
@@ -48,7 +47,6 @@ class VoiceState(object):
 vs = VoiceState(client)
 
 def task():
-    print('task')
     client.loop.create_task(vs.audio_player_task())
     
 youtube_dl.utils.bug_reports_message = lambda: ''

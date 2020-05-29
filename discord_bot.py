@@ -84,10 +84,8 @@ class YTDLSource(discord.PCMVolumeTransformer):
     @classmethod
     async def from_url(cls, url, *, loop=None, stream=False):
         loop = loop or asyncio.get_event_loop()
-        t = lambda: ytdl.extract_info(url, download=not stream)
-        print(t)
-        data = await loop.run_in_executor(None, t)
-        print(data)
+        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
+        
         if 'entries' in data:
             # take first item from a playlist
             data = data['entries'][0]
@@ -201,7 +199,6 @@ async def on_message(message):
                 
             vs.channel = voice_client
             player = await YTDLSource.from_url('https://www.youtube.com/watch?v='+id)
-            await message.channel.send(player)
             embed = discord.Embed(
                 title=player.data['title'],
                 description=time.strftime('%H:%M:%S', time.gmtime(player.data['duration'])),

@@ -190,7 +190,6 @@ async def on_message(message):
                 source = response.read()
                 data = json.loads(source)
                 id = data['items'][0]['id']['videoId']
-                await message.channel.send(id)
             
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 voice_client = client.voice_clients[0]

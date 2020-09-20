@@ -241,6 +241,7 @@ async def on_message(message):
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 if client.voice_clients[0].is_playing():
                     client.voice_clients[0].stop()
+                    await clear_message(1, message)
                     await message.channel.send(embed=discord.Embed(title="컽! by {}".format(message.author), colour = 0x2EFEF7))
     '''
     if message.content.startswith("-q") or message.content.startswith("-ㅂ"):

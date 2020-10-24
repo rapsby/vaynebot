@@ -287,6 +287,13 @@ async def on_message(message):
             colour=discord.Colour.blue()
         )
         await message.channel.send(embed=embed)
+    if '문희' in message.content:
+        embed = discord.Embed(
+            title='문희는 ',
+            description='멍청이',
+            colour=discord.Colour.blue()
+        )
+        await message.channel.send(embed=embed)
         
     if message.content.startswith("안녕"):
         embed = discord.Embed(

@@ -294,6 +294,13 @@ async def on_message(message):
             colour=discord.Colour.blue()
         )
         await message.channel.send(embed=embed)
+    if '성욱' in message.content:
+        await clear_message(1, message)
+        embed = discord.Embed(
+            title='그의 이름을 함부로 불러선 안 돼!',
+            colour=discord.Colour.blue()
+        )
+        await message.channel.send(embed=embed)
         
     if message.content.startswith("안녕"):
         embed = discord.Embed(

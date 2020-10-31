@@ -184,13 +184,15 @@ async def on_message(message):
             q = "+".join(q)
             key = os.environ["key"] 
             url = 'https://www.googleapis.com/youtube/v3/search?key={}&part=snippet&type=video&q='.format(key) + parse.quote(q)
+            print(url)
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-
+            print(req)
             with urllib.request.urlopen(req) as response:
                 source = response.read()
                 data = json.loads(source)
                 id = data['items'][0]['id']['videoId']
-            
+                print(id)
+                print(type(id))
             if client.voice_clients and channel == client.voice_clients[0].channel:
                 voice_client = client.voice_clients[0]
             else:

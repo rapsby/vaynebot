@@ -199,7 +199,7 @@ async def on_message(message):
             vs.channel = voice_client
             player = await YTDLSource.from_url('https://www.youtube.com/watch?v='+id)
             #ㅇㅇ
-            await message.channel.send(player.data)
+            #await message.channel.send(player.data)
             #
             embed = discord.Embed(
                 title=player.data['title'],

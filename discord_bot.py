@@ -102,7 +102,6 @@ async def on_ready():
     await client.change_presence(status=discord.Status.online , activity=activity)
 
 
-
 @client.event
 async def on_message(message):
     global vs
@@ -195,7 +194,7 @@ async def on_message(message):
                 voice_client = await channel.connect()
                 
             vs.channel = voice_client
-            player = await YTDLSource.from_url('https://www.youtube.com/watch?v='+id)
+            player = await YTDLSource.from_url('https://youtu.be/'+id)
             
             await message.channel.send(player.data)
             

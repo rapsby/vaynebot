@@ -143,6 +143,12 @@ async def on_message(message):
                     if answer.content[0].isdigit() and 0 < int(answer.content[0]) < 6:
                         selected = int(answer.content[0])-1
                     else:
+                        embed = discord.Embed(
+                        title="Selection is canceled.",
+                        colour=discord.Colour.blue()
+                        )
+                        await message.channel.send(embed = embed)
+
                         return
             except asyncio.TimeoutError:
                 return

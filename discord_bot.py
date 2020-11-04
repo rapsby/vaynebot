@@ -131,7 +131,7 @@ async def on_message(message):
                     title_list.append(title)
             
             titlestr = "```css\n[음악선택]\n\n"
-            titlestr += "TYPE TO SELECT : 1 ~ 5\nTYPE TO Exit : anything\n"            
+            titlestr += "[TYPE TO SELECT : 1 ~ 5]\n[TYPE TO Exit : anything]\n"            
             for i in range(0, len(title_list)):
                 titlestr += str(i+1)+" : "+title_list[i]+"\n"
             await message.channel.send(titlestr+"```")   
@@ -140,7 +140,7 @@ async def on_message(message):
                 answer = await client.wait_for('message', timeout=60)
                 selected = None
                 if answer:
-                    if answer.content[0].isdigit():
+                    if answer.content[0].isdigit() and 1<answer.content[0]<6:
                         selected = int(answer.content[0])-1
                     else:
                         return

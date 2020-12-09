@@ -24,9 +24,6 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 from urllib.parse import quote
 import re # Regex for youtube link
-import warnings
-import requests
-import unicodedata
 import json
 import time
 

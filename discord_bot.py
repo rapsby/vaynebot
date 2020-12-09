@@ -564,6 +564,7 @@ async def on_message(message):
             try:
                 html = urlopen(URL)
                 bs = BeautifulSoup(html, 'html.parser')
+                print(bs)
                 if len(message.content.split(" ")) == 1:
                     embed = discord.Embed(title="닉네임이 입력되지 않았습니다", description="", color=0x5CD1E5)
                     embed.add_field(name="Player nickname not entered",
@@ -593,7 +594,7 @@ async def on_message(message):
                         embed.add_field(name="Player search from dak.gg", value=URL, inline=False)
                         await message.channel.send("PUBG player " + playerNickname + "'s TPP solo que information", embed=embed)
                     else:
-                        # print(soloQueInfo)
+                        print(soloQueInfo)
                         # Get total playtime
                         soloQueTotalPlayTime = soloQueInfo.find('span', {'class': "time_played"}).text.strip()
                         # Get Win/Top10/Lose : [win,top10,lose]

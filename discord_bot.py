@@ -331,6 +331,13 @@ async def on_message(message):
         embed.set_image(url = urlF)
         await message.channel.send(embed=embed)
 
+    if message.content == 'test':
+        await message.channel.send(content='https://open.spotify.com/track/7HrE6HtYNBbGqp5GmHbFV0')
+    if message.content == 'test1':
+        await message.channel.send(content='https://www.youtube.com/watch?v=3iM_06QeZi8')
+
+
+
     if message.content.startswith("!경쟁전1"):#TabErrorTPP 
         baseURL = "https://dak.gg/profile/"
         playerNickname = ''.join((message.content).split(' ')[1:])
@@ -557,7 +564,6 @@ async def on_message(message):
                                 description="Can't find player " + playerNickname + "'s information.\nPlease check player's nickname again",
                                 color=0x5CD1E5)
             await message.channel.send("Error : Not existing player", embed=embed)
-
     if message.content.startswith("!배그솔로1"):
         baseURL = "https://dak.gg/profile/"
         playerNickname = ''.join((message.content).split(' ')[1:])

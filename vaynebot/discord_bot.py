@@ -32,7 +32,7 @@ import time
 client = discord.Client()
 que = {}
 pid = 0
-att = 1231234
+att = 12312345
 async def clear_message(amount, message):
     await message.channel.purge(limit = amount)
 

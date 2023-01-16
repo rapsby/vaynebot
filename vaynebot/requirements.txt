@@ -1,0 +1,8 @@
+discord.py
+dnspython
+PyNaCl
+async-timeout
+youtube-dl
+opuslib
+ffmpeg
+BeautifulSoup4
